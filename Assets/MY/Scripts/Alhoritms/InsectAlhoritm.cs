@@ -1,21 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InsectAlhoritm : MonoBehaviour {
 
     public bool ISWORKING = false;
+    public float BestWay = 0;
+
+    public Button StartButton;
+    public Text BW;
 
     public void CreateEnvironment()
     {
         // creating sitys and insect
         SityGenerator.Instance.CreateSitys(Setting.Instance.SityCount);
         SityGenerator.Instance.CreateEdges(Setting.Instance.SityCount);
+        SityGenerator.Instance.UpdateAverageDistanceWeight();
+        SityGenerator.Instance.UpdateAveragePheromone();
         //InsectsGenerator.Instance.CreateInsects(Setting.Instance.InsectCount);
     }
 
     public void StartAlhoritm()
     {
+        if (BestWay == 0)
+        {
+            BestWay = Setting.Instance.AverageDistance * Setting.Instance.SityCount;
+        }
         InsectsGenerator.Instance.CreateInsects(Setting.Instance.InsectCount);
         StartCoroutine(Alhoritm1());
     }
@@ -24,6 +35,12 @@ public class InsectAlhoritm : MonoBehaviour {
     {
         while (ISWORKING)
         {
+            //evaporation
+            if (InsectsGenerator.Instance.InsectsArray[0].ISFREE)
+            {
+                SityGenerator.Instance.EvaporateAll();
+            }
+
             for (int i = 0; i < InsectsGenerator.Instance.InsectsArray.Count; i++)
             {
                 //check the free insect
@@ -41,8 +58,26 @@ public class InsectAlhoritm : MonoBehaviour {
                     }
                 }
             }
-            yield return new WaitForSeconds(0.2f);
+            SityGenerator.Instance.UpdateAveragePheromone();            
+            yield return new WaitForSeconds(0.1f);
+
+            if (InsectsGenerator.Instance.InsectsArray[0].Memory.Count == Setting.Instance.SityCount)
+            {
+                foreach (InsectBase I in InsectsGenerator.Instance.InsectsArray)
+                {
+                    if (BestWay > I.Distance)
+                    {
+                        BestWay = I.Distance;
+                    }
+                }
+
+                BW.text = "Best insect way : " + Mathf.Round(BestWay).ToString() + "km";
+
+                ISWORKING = false;
+            }
         }
+        Debug.Log("End");
+        StartButton.enabled = true;
     }
 
     public int Brain(InsectBase INS)
@@ -93,12 +128,14 @@ public class InsectAlhoritm : MonoBehaviour {
 
     void Start()
     {
+
         CreateEnvironment();
     }
 
     public void ButtonStartClick()
     {
         ISWORKING = true;
+        StartButton.enabled = false;
         StartAlhoritm();
     }
 

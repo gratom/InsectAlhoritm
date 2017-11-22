@@ -43,7 +43,7 @@ public class Edge
         SolveDistance();
     }
 
-    public void UpdatePheromone()
+    public void EvaporatePheromone()
     {
         PheromoneLevel *= Setting.Instance.EvaporationKoef;
     }
@@ -60,6 +60,18 @@ public class Edge
                 return IDSity1;
             }
         return -1;
+    }
+
+    public float GetPheromoneWeight()
+    {
+        float W = Setting.Instance.AverageDistance * (PheromoneLevel * Setting.Instance.PheromonWeight); // normilize
+        return W;
+    }
+
+    public float GetDistanceWeight()
+    {
+        float W = Setting.Instance.AverageDistance * ((1 / Distance) * Setting.Instance.DistanceWeight); // normilize
+        return W;
     }
 
     public float GetWeight()

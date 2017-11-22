@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Setting : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class Setting : MonoBehaviour {
     public int SityCount;
     public int InsectCount;
     public float EARTH_RADIUS;
-    public float EvaporationKoef;
+    public float EvaporationKoef = 0.9f;
     public float PheromonWeight;
     public float DistanceWeight;
     public float AverageDistance;
@@ -19,9 +20,35 @@ public class Setting : MonoBehaviour {
     public float PheromoneRegen = 0;
     public float Speed;
 
+    public Toggle IsVisual;
+    public Slider RatioWeight;
+    public Text RatioText;
+    public Slider EvaporationSlider;
+    public Text EvaporationText;
+
     void Awake()
     {
         Instance = this;
+    }
+
+    public void ChangeEvaporation()
+    {
+        EvaporationText.text = "Evaporation : " + (Mathf.Round(EvaporationSlider.value * 100) / 100).ToString();
+        EvaporationKoef = EvaporationSlider.value;
+    }
+
+    public void ChangeRatio()
+    {
+        RatioText.text = (Mathf.Round(RatioWeight.value * 100) / 100).ToString() + " : " + (Mathf.Round((RatioWeight.maxValue - RatioWeight.value) * 100) / 100).ToString();
+        PheromonWeight = RatioWeight.value;
+        DistanceWeight = (RatioWeight.maxValue - RatioWeight.value);
+        SityGenerator.Instance.UpdateAverageDistanceWeight();
+        SityGenerator.Instance.UpdateAveragePheromone();
+    }
+
+    public void ChangeIsVisual()
+    {
+        IsVisualize = IsVisual.isOn;
     }
 
 	// Use this for initialization

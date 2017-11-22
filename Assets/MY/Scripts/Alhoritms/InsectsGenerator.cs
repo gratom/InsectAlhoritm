@@ -27,6 +27,10 @@ public class InsectsGenerator : MonoBehaviour {
 
     public void CreateInsects(int Amount)
     {
+        if (InsectsArray.Count != 0)
+        {
+            DeleteInsects();
+        }
         InsectsArray = new List<InsectBase>();
         for (int i = 0; i < Amount; i++)
         {
@@ -35,6 +39,14 @@ public class InsectsGenerator : MonoBehaviour {
             InsectsArray.Add(GI.GetComponent<InsectBase>());
         }
         //Debug.Log(ArrayOfSity.Count);
+    }
+
+    public void DeleteInsects()
+    {
+        foreach (InsectBase I in InsectsArray)
+        {
+            Destroy(I.InsectObject);            
+        }
     }
 
     public InsectBase GetInsectFromID(int InsectID)

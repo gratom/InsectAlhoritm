@@ -79,15 +79,19 @@ public class InsectBase : MonoBehaviour {
 
     public void EndOfMove()
     {
-        Distance += SityGenerator.Instance.GetEdgeFromIDs(SityID, SityGoalID).Distance;
-        SityID = SityGoalID;
+        
+        if (Memory.Count < Setting.Instance.SityCount)
+        {
+            Distance += SityGenerator.Instance.GetEdgeFromIDs(SityID, SityGoalID).Distance;
+        }
+        SityID = SityGoalID;        
         Place.SetCoordinates(SityGenerator.Instance.ArrayOfSity[SityID].SityPlace.SDegree, SityGenerator.Instance.ArrayOfSity[SityID].SityPlace.DDegree);
         UpdatePosition();
         UpdateMemory();
         if (Memory.Count <= Setting.Instance.SityCount)
-        {
+        {            
             ISFREE = true;
-        }
+        }        
     }
 
 	// Use this for initialization

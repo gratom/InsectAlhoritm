@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SityGenerator : MonoBehaviour {
 
@@ -10,6 +11,9 @@ public class SityGenerator : MonoBehaviour {
     public List<SityBase> ArrayOfSity;
     public List<Edge> ArrayOfEdges;
     public List<string> SityNames;
+
+    public Text AveragePheromone;
+    public Text AverageDistanceWeight;
 
     void Awake()
     {
@@ -88,6 +92,34 @@ public class SityGenerator : MonoBehaviour {
         }
         //Debug.Log(ArrayOfEdges.Count);
         Setting.Instance.AverageDistance = AverageD / ArrayOfEdges.Count;
+    }
+
+    public void UpdateAveragePheromone()
+    {
+        float AllPheromones = 0;
+        foreach (Edge E in ArrayOfEdges)
+        {
+            AllPheromones += E.GetPheromoneWeight();
+        }
+        AveragePheromone.text = "Av. Pheromon :" + (AllPheromones / ArrayOfEdges.Count).ToString();
+    }
+
+    public void EvaporateAll()
+    {
+        foreach (Edge E in ArrayOfEdges)
+        {
+            E.EvaporatePheromone();
+        }
+    }
+
+    public void UpdateAverageDistanceWeight()
+    {
+        float AllDist = 0;
+        foreach (Edge E in ArrayOfEdges)
+        {
+            AllDist += E.GetDistanceWeight();
+        }
+        AverageDistanceWeight.text = "Av. Dist. weight :" + (AllDist / ArrayOfEdges.Count).ToString();
     }
 
 }
