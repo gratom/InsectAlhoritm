@@ -5,11 +5,17 @@ using UnityEngine.UI;
 
 public class InsectAlhoritm : MonoBehaviour {
 
+    public static InsectAlhoritm Instance;
     public bool ISWORKING = false;
     public float BestWay = 0;
 
     public Button StartButton;
     public Text BW;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     public void CreateEnvironment()
     {
@@ -19,6 +25,12 @@ public class InsectAlhoritm : MonoBehaviour {
         SityGenerator.Instance.UpdateAverageDistanceWeight();
         SityGenerator.Instance.UpdateAveragePheromone();
         //InsectsGenerator.Instance.CreateInsects(Setting.Instance.InsectCount);
+    }
+
+    public void BestWayToZero()
+    {
+        BestWay = 0;
+        BW.text = "Best insect way : " + Mathf.Round(BestWay).ToString() + "km";
     }
 
     public void StartAlhoritm()
@@ -128,7 +140,6 @@ public class InsectAlhoritm : MonoBehaviour {
 
     void Start()
     {
-
         CreateEnvironment();
     }
 

@@ -94,6 +94,16 @@ public class SityGenerator : MonoBehaviour {
         Setting.Instance.AverageDistance = AverageD / ArrayOfEdges.Count;
     }
 
+    public void RegenerateSitys()
+    {
+        foreach (SityBase S in ArrayOfSity)
+        {
+            Destroy(S.SityObject);
+        }
+        CreateSitys(Setting.Instance.SityCount);
+        CreateEdges(Setting.Instance.SityCount);
+    }
+
     public void UpdateAveragePheromone()
     {
         float AllPheromones = 0;

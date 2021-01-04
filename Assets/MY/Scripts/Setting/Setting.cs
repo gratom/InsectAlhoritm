@@ -25,10 +25,33 @@ public class Setting : MonoBehaviour {
     public Text RatioText;
     public Slider EvaporationSlider;
     public Text EvaporationText;
+    public Slider SityCountSlider;
+    public Text SityCountText;
+    public Slider InsectCountSlider;
+    public Text InsectCountText;
+    public Button UpdateSitysButton;
 
     void Awake()
     {
         Instance = this;
+    }
+
+    public void UpdateSitys()
+    {
+        SityGenerator.Instance.RegenerateSitys();
+        InsectAlhoritm.Instance.BestWayToZero();
+    }
+
+    public void ChangeSityCount()
+    {
+        SityCountText.text = "Sity count : " + Mathf.Round(SityCountSlider.value);
+        SityCount = Mathf.RoundToInt(SityCountSlider.value);
+    }
+
+    public void ChangeInsectCount()
+    {
+        InsectCountText.text = "Insect count : " + Mathf.Round(InsectCountSlider.value);
+        InsectCount = Mathf.RoundToInt(InsectCountSlider.value);
     }
 
     public void ChangeEvaporation()
